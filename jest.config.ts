@@ -7,14 +7,28 @@ const config: Config = {
       displayName: 'node',
       testEnvironment: 'node',
       testMatch: ['**/__tests__/lib/**/*.test.ts'],
-      transform: { '^.+\\.tsx?$': ['ts-jest', { tsconfig: { jsx: 'react-jsx' } }] },
+      moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1',
+      },
+      transform: {
+        '^.+\\.tsx?$': ['ts-jest', {
+          tsconfig: { jsx: 'react-jsx', moduleResolution: 'node' }
+        }],
+      },
     },
     {
       displayName: 'jsdom',
       testEnvironment: 'jsdom',
       testMatch: ['**/__tests__/components/**/*.test.tsx'],
+      moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1',
+      },
       setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-      transform: { '^.+\\.tsx?$': ['ts-jest', { tsconfig: { jsx: 'react-jsx' } }] },
+      transform: {
+        '^.+\\.tsx?$': ['ts-jest', {
+          tsconfig: { jsx: 'react-jsx', moduleResolution: 'node' }
+        }],
+      },
     },
   ],
 }
