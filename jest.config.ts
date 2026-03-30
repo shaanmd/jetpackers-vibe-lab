@@ -14,7 +14,14 @@ const config: Config = {
         '^.+\\.tsx?$': ['ts-jest', {
           tsconfig: { jsx: 'react-jsx', moduleResolution: 'node' }
         }],
+        '^.+\\.js$': ['ts-jest', {
+          tsconfig: { jsx: 'react-jsx', moduleResolution: 'node' },
+          diagnostics: false,
+        }],
       },
+      transformIgnorePatterns: [
+        '/node_modules/(?!(nanoid)/)',
+      ],
     },
     {
       displayName: 'jsdom',
