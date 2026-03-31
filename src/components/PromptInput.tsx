@@ -38,21 +38,22 @@ export function PromptInput({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={isDisabled}
-        rows={4}
-        className="w-full rounded-xl border border-gray-200 p-3 text-sm resize-none
-          focus:outline-none focus:ring-2 focus:ring-purple-400
-          disabled:bg-gray-50 disabled:text-gray-400"
+        rows={5}
+        className="w-full rounded-xl bg-white/10 border border-white/20 p-3 text-sm
+          text-white placeholder-white/30 resize-none
+          focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent
+          disabled:opacity-50 disabled:cursor-not-allowed"
       />
       <button
         onClick={handleSubmit}
         disabled={isDisabled}
-        className="w-full rounded-xl bg-purple-600 py-2.5 text-sm font-semibold
-          text-white hover:bg-purple-700 active:scale-95 transition-all
-          disabled:bg-gray-300 disabled:cursor-not-allowed"
+        className="w-full rounded-xl bg-purple-500 py-2.5 text-sm font-semibold
+          text-white hover:bg-purple-400 active:scale-95 transition-all
+          disabled:bg-white/10 disabled:text-white/30 disabled:cursor-not-allowed"
       >
         {label}
       </button>
-      <p className="text-xs text-gray-400 text-right">⌘ + Enter to submit</p>
+      <p className="text-xs text-white/25 text-right">⌘ + Enter to submit</p>
     </div>
   )
 }
