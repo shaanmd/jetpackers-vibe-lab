@@ -79,13 +79,13 @@ export function Builder() {
 
         {/* Logo */}
         <div className="px-6 pt-6 pb-5 border-b border-white/10">
-          <div className="flex items-center gap-2.5 mb-1">
-            <span className="text-2xl">✈️</span>
+          <div className="flex items-center gap-3 mb-1">
+            <img src="/logo.png" alt="Jetpackers" className="w-9 h-9 object-contain" />
             <span className="font-bold text-white text-lg tracking-tight">
               Jetpackers Vibe Lab
             </span>
           </div>
-          <p className="text-white/40 text-xs pl-9">Describe it. Build it. Share it.</p>
+          <p className="text-white/40 text-xs pl-12">Describe it. Build it. Share it.</p>
         </div>
 
         {/* Prompt area */}
