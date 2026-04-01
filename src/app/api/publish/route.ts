@@ -11,7 +11,12 @@ export async function POST(request: NextRequest) {
   }
 
   const slug = generateSlug(body.title)
-  await saveApp(slug, body.html)
+  try {
+    await saveApp(slug, body.html)
+  } catch (err) {
+    console.error('Blob save error:', err)
+    return NextResponse.json({ error: String(err) }, { status: 500 })
+  }
 
   const base =
     process.env.NEXT_PUBLIC_BASE_URL ||

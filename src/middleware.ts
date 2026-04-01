@@ -5,11 +5,12 @@ const PUBLIC_PATHS = ['/login', '/api/auth']
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Always allow public paths and static assets
+  // Always allow public paths, static assets, and files with extensions (images etc.)
   if (
     PUBLIC_PATHS.some((p) => pathname.startsWith(p)) ||
     pathname.startsWith('/_next') ||
-    pathname.startsWith('/favicon')
+    pathname.startsWith('/favicon') ||
+    /\.\w+$/.test(pathname) // any file with an extension (logo.png, .svg, etc.)
   ) {
     return NextResponse.next()
   }
