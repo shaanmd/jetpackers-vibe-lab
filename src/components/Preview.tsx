@@ -8,16 +8,21 @@ interface PreviewProps {
 }
 
 const BUILD_MESSAGES = [
-  '✨ Conjuring your creation…',
-  '🎨 Painting with pixels…',
-  '⚡ Bending reality to your will…',
-  '🚀 Teaching electrons to dance…',
-  '🌟 Weaving digital sorcery…',
-  '🛸 Summoning something spectacular…',
-  '💫 Making the internet jealous…',
-  '🎭 Crafting your masterpiece…',
-  '🔮 Consulting the AI oracle…',
-  '🦄 Sprinkling in the magic…',
+  '📼 Be kind, rewind… your app is loading',
+  '☎️ Dialling up the internet (beeeeep booooop)…',
+  '💾 Saving to floppy disk… just kidding, it\'s the cloud',
+  '📟 Paging your app… paging your app…',
+  '🎮 It\'s dangerous to go alone — building this for you',
+  '📺 This is not a test of the emergency broadcast system',
+  '🎸 Don\'t stop believin\'… your app is almost ready',
+  '🧇 Life moves pretty fast — Ferris is building your app',
+  '🕹️ Insert coin to continue… just kidding, it\'s free',
+  '📻 Totally awesome app incoming — stay excellent',
+  '🎬 As if! Your app is nearly done',
+  '🌀 Nobody puts your app in a corner',
+  '🦖 Your app survived the Oregon Trail (no dysentery)',
+  '🎤 You\'ve got the power — app incoming',
+  '🕶️ Be excellent to each other while you wait',
 ]
 
 export function Preview({ html, isLoading }: PreviewProps) {
