@@ -12,7 +12,9 @@ Rules:
 - Beautiful modern design: rounded corners, soft shadows, good typography, thoughtful colour
 - Mobile-friendly by default
 - Return ONLY the raw HTML starting with <!DOCTYPE html>
-- No explanation. No markdown. No code fences. Just the raw HTML.`
+- No explanation. No markdown. No code fences. Just the raw HTML.
+- NEVER use localStorage, sessionStorage, or IndexedDB — the app runs in a sandboxed iframe where these are blocked. Store all state in JavaScript variables instead.
+- NEVER use alert(), confirm(), or prompt() — they are blocked in sandboxed iframes.`
 
 export function buildMessages(
   prompt: string,
