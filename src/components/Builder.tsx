@@ -6,12 +6,20 @@ import { Preview } from './Preview'
 import { ShareModal } from './ShareModal'
 import type { Message } from '@/types'
 
+interface PublishedApp {
+  url: string
+  slug: string
+  label: string
+}
+
 export function Builder() {
   const [html, setHtml] = useState('')
   const [history, setHistory] = useState<Message[]>([])
   const [isBuilding, setIsBuilding] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
+  const [publishedApps, setPublishedApps] = useState<PublishedApp[]>([])
+  const [totalBuilds, setTotalBuilds] = useState(0)
 
   async function handleBuild(prompt: string) {
     setIsBuilding(true)
@@ -36,6 +44,7 @@ export function Builder() {
       }
 
       setHtml(accumulated)
+      setTotalBuilds(n => n + 1)
       setHistory((prev) => [
         ...prev,
         { role: 'user', content: prompt },
@@ -61,6 +70,13 @@ export function Builder() {
 
       const data = await response.json()
       setShareUrl(data.url)
+
+      // Add to My Apps list with a short label
+      const appNumber = publishedApps.length + 1
+      setPublishedApps(prev => [
+        { url: data.url, slug: data.slug, label: `App ${appNumber}` },
+        ...prev,
+      ])
     } catch (err) {
       console.error('Publish error:', err)
     } finally {
@@ -89,7 +105,7 @@ export function Builder() {
         </div>
 
         {/* Prompt area */}
-        <div className="flex-1 p-5 flex flex-col gap-5 overflow-y-auto">
+        <div className="flex-1 p-5 flex flex-col gap-5 overflow-y-auto min-h-0">
           <div>
             <p className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">
               {isFirstBuild ? '✨ What do you want to build?' : '🔄 What should we change?'}
@@ -112,16 +128,44 @@ export function Builder() {
               {isPublishing ? '⏳ Publishing…' : '🔗 Publish & Share'}
             </button>
           )}
+
+          {/* My Apps */}
+          {publishedApps.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">
+                📱 My Apps
+              </p>
+              <div className="flex flex-col gap-2">
+                {publishedApps.map((app) => (
+                  <a
+                    key={app.slug}
+                    href={app.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between rounded-xl bg-white/10
+                      border border-white/20 px-3 py-2 text-sm text-white/80
+                      hover:bg-white/20 hover:text-white transition-colors group"
+                  >
+                    <span>🚀 {app.label}</span>
+                    <span className="text-white/40 group-hover:text-white/70 text-xs">Open →</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Footer */}
-        {versionCount > 0 && (
-          <div className="px-6 py-4 border-t border-white/10">
-            <p className="text-xs text-white/30 text-center">
-              {versionCount} version{versionCount !== 1 ? 's' : ''} built
+        {/* Footer stats */}
+        <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
+          <p className="text-xs text-white/30">
+            {totalBuilds} build{totalBuilds !== 1 ? 's' : ''} this session
+          </p>
+          {versionCount > 0 && (
+            <p className="text-xs text-white/30">
+              v{versionCount} current
             </p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* ── Right preview area ── */}

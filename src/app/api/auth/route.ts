@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   const { code } = await request.json()
 
-  if (!code || code !== process.env.ACCESS_CODE) {
+  const validCodes = (process.env.ACCESS_CODE || '').split(',').map(s => s.trim())
+  if (!code || !validCodes.includes(code)) {
     return NextResponse.json({ error: 'Invalid code' }, { status: 401 })
   }
 

@@ -17,7 +17,8 @@ export function middleware(request: NextRequest) {
 
   // Check for valid session cookie
   const session = request.cookies.get('vibe_session')?.value
-  if (session === process.env.ACCESS_CODE) {
+  const validCodes = (process.env.ACCESS_CODE || '').split(',').map(s => s.trim())
+  if (session && validCodes.includes(session)) {
     return NextResponse.next()
   }
 
