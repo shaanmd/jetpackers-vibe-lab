@@ -4,7 +4,7 @@ const token = process.env.BLOB_READ_WRITE_TOKEN
 
 export async function saveApp(slug: string, html: string): Promise<string> {
   const blob = await put(`apps/${slug}.html`, html, {
-    access: 'public',
+    access: 'private',
     contentType: 'text/html',
     addRandomSuffix: false,
     token,
