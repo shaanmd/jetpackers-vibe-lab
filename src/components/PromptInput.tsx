@@ -63,6 +63,7 @@ export function PromptInput({
     setAttachError(null)
     const isImage = ALLOWED_IMAGE_TYPES.includes(file.type as ImageMimeType)
     const reader = new FileReader()
+    reader.onerror = () => setAttachError('Could not read file. Please try again.')
 
     if (isImage) {
       reader.onload = (evt) => {
