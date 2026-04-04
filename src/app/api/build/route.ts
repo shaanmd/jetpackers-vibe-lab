@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     return new Response('Prompt is required', { status: 400 })
   }
 
-  const stream = createClaudeStream(body.prompt, body.history ?? [])
+  const stream = createClaudeStream(body.prompt, body.history ?? [], body.attachment)
   const encoder = new TextEncoder()
 
   const readable = new ReadableStream({
