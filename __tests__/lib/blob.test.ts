@@ -1,13 +1,13 @@
 jest.mock('@vercel/blob', () => ({
   put: jest.fn(),
-  list: jest.fn(),
+  head: jest.fn(),
 }))
 
-import { put, list } from '@vercel/blob'
+import { put, head } from '@vercel/blob'
 import { saveApp, findApp } from '@/lib/blob'
 
 const mockPut = put as jest.MockedFunction<typeof put>
-const mockList = list as jest.MockedFunction<typeof list>
+const mockHead = head as jest.MockedFunction<typeof head>
 
 describe('saveApp', () => {
   beforeEach(() => jest.clearAllMocks())
@@ -19,6 +19,7 @@ describe('saveApp', () => {
       pathname: 'apps/my-app-abc123.html',
       contentType: 'text/html',
       contentDisposition: 'inline',
+      etag: '"abc123"',
     })
 
     const result = await saveApp('my-app-abc123', '<html>hello</html>')
@@ -26,7 +27,7 @@ describe('saveApp', () => {
     expect(mockPut).toHaveBeenCalledWith(
       'apps/my-app-abc123.html',
       '<html>hello</html>',
-      expect.objectContaining({ access: 'public', contentType: 'text/html' })
+      expect.objectContaining({ access: 'private', contentType: 'text/html' })
     )
     expect(result).toBe('https://blob.vercel-storage.com/apps/my-app-abc123.html')
   })
@@ -36,16 +37,16 @@ describe('findApp', () => {
   beforeEach(() => jest.clearAllMocks())
 
   it('returns html string when blob exists', async () => {
-    mockList.mockResolvedValueOnce({
-      blobs: [{
-        url: 'https://blob.vercel-storage.com/apps/my-slug.html',
-        downloadUrl: 'https://blob.vercel-storage.com/apps/my-slug.html',
-        pathname: 'apps/my-slug.html',
-        size: 100,
-        uploadedAt: new Date(),
-      }],
-      cursor: undefined,
-      hasMore: false,
+    mockHead.mockResolvedValueOnce({
+      url: 'https://blob.vercel-storage.com/apps/my-slug.html',
+      downloadUrl: 'https://blob.vercel-storage.com/apps/my-slug.html',
+      pathname: 'apps/my-slug.html',
+      size: 100,
+      uploadedAt: new Date(),
+      contentType: 'text/html',
+      contentDisposition: 'inline',
+      cacheControl: 'public, max-age=31536000',
+      etag: '"abc123"',
     })
 
     global.fetch = jest.fn().mockResolvedValueOnce({
@@ -58,27 +59,23 @@ describe('findApp', () => {
   })
 
   it('returns null when no blob found', async () => {
-    mockList.mockResolvedValueOnce({
-      blobs: [],
-      cursor: undefined,
-      hasMore: false,
-    })
+    mockHead.mockRejectedValueOnce(new Error('Blob not found'))
 
     const html = await findApp('missing-slug')
     expect(html).toBeNull()
   })
 
   it('returns null when fetch fails', async () => {
-    mockList.mockResolvedValueOnce({
-      blobs: [{
-        url: 'https://blob.vercel-storage.com/apps/my-slug.html',
-        downloadUrl: 'https://blob.vercel-storage.com/apps/my-slug.html',
-        pathname: 'apps/my-slug.html',
-        size: 100,
-        uploadedAt: new Date(),
-      }],
-      cursor: undefined,
-      hasMore: false,
+    mockHead.mockResolvedValueOnce({
+      url: 'https://blob.vercel-storage.com/apps/my-slug.html',
+      downloadUrl: 'https://blob.vercel-storage.com/apps/my-slug.html',
+      pathname: 'apps/my-slug.html',
+      size: 100,
+      uploadedAt: new Date(),
+      contentType: 'text/html',
+      contentDisposition: 'inline',
+      cacheControl: 'public, max-age=31536000',
+      etag: '"abc123"',
     })
 
     global.fetch = jest.fn().mockResolvedValueOnce({
