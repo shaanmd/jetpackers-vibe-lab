@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { PromptInput } from './PromptInput'
 import { Preview } from './Preview'
 import { ShareModal } from './ShareModal'
-import type { Message } from '@/types'
+import type { Attachment, Message } from '@/types'
 
 interface PublishedApp {
   url: string
@@ -21,14 +21,14 @@ export function Builder() {
   const [publishedApps, setPublishedApps] = useState<PublishedApp[]>([])
   const [totalBuilds, setTotalBuilds] = useState(0)
 
-  async function handleBuild(prompt: string) {
+  async function handleBuild(prompt: string, attachment?: Attachment) {
     setIsBuilding(true)
 
     try {
       const response = await fetch('/api/build', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, history }),
+        body: JSON.stringify({ prompt, history, attachment }),
       })
 
       if (!response.ok) throw new Error('Build failed')
