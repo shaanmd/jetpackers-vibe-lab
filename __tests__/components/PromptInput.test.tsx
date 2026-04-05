@@ -120,7 +120,20 @@ describe('PromptInput — file validation', () => {
     Object.defineProperty(bigCsv, 'size', { value: 600 * 1024 })
     const input = document.querySelector('input[type="file"]') as HTMLInputElement
     await userEvent.upload(input, bigCsv)
-    expect(screen.getByText(/too large.*csVs must be under 500KB/i)).toBeInTheDocument()
+    expect(screen.getByText(/too large.*CSVs must be under 500KB/i)).toBeInTheDocument()
+  })
+
+  it('shows error when FileReader fails to read the file', async () => {
+    const instance = makeFileReaderMock('')
+    instance.readAsDataURL.mockImplementation(function (this: typeof instance) {
+      this.onerror?.({} as any)
+    })
+    jest.spyOn(global, 'FileReader').mockImplementation(() => instance as any)
+
+    render(<PromptInput onSubmit={jest.fn()} isDisabled={false} label="Build it" />)
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement
+    await userEvent.upload(input, makePngFile('broken.png'))
+    expect(screen.getByText(/could not read file/i)).toBeInTheDocument()
   })
 })
 
