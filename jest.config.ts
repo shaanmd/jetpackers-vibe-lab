@@ -27,10 +27,19 @@ const config: Config = {
       displayName: 'jsdom',
       testEnvironment: 'jsdom',
       testMatch: ['**/__tests__/components/**/*.test.tsx'],
+      testEnvironmentOptions: {
+        customExportConditions: [''],
+        url: 'http://localhost',
+      },
       moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
       },
+      setupFiles: ['<rootDir>/jest.setup-globals.js'],
       setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+      fakeTimers: {
+        enableGlobally: false,
+        timerLimit: 10000,
+      },
       transform: {
         '^.+\\.tsx?$': ['ts-jest', {
           tsconfig: { jsx: 'react-jsx', moduleResolution: 'node' }

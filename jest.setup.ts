@@ -1,6 +1,9 @@
 // jest.setup.ts
 import '@testing-library/jest-dom'
 
+// Note: TextEncoder, TextDecoder, ReadableStream, and fetch are polyfilled in jest.setup-globals.js
+// which runs before this file
+
 // Disable accept-attribute filtering in userEvent.upload so that our JS
 // validation logic (not the browser's native file-type filter) is exercised in
 // tests. Without this, user-event v14 silently drops files that don't match the
