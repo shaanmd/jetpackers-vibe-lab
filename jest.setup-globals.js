@@ -46,10 +46,6 @@ if (typeof global.ReadableStream === 'undefined') {
 
       underlyingSource?.start?.(this.controller);
     }
-
-    getReader() {
-      return null;
-    }
   }
 
   global.ReadableStream = FetchReadableStream;
